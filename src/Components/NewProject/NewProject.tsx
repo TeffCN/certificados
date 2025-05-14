@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useManageProjects from "../../Hook/useManageProjects"; // Asegúrate de que la ruta sea correcta
+import useManageProjects from "../../Hook/useManageProjects"; 
 import { useUserStore } from "../../Context/context";
 import { ProjectType } from "../../TypeScript/Types/types";
 
@@ -35,7 +35,7 @@ const NewProject: React.FC = () => {
     if (selectedProject) {
       setProjectData({
         projectTitle: selectedProject.projectTitle,
-        nit: (selectedProject as any).nit || "", // ← solo si ya tenías NIT guardado
+        nit: (selectedProject as any).nit || "", 
         uid: selectedUid,
       });
     }
@@ -136,7 +136,6 @@ const NewProject: React.FC = () => {
         />
       </div>
 
-      {/* NUEVO INPUT: NIT (-) DÍGITO DE VERIFICACIÓN */}
       <div className="mb-5">
         <label
           htmlFor="nit"

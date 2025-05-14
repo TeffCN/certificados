@@ -20,7 +20,7 @@ const FormExtra = () => {
 
   return (
     <div className="flex items-center justify-between">
-      {/* ✅ Opción "Recordarme" implementada */}
+      {/*  Opción Recordarme */}
       <div className="flex items-center">
         <input
           id="remember-me"
@@ -35,7 +35,7 @@ const FormExtra = () => {
         </label>
       </div>
 
-      {/* ✅ Link para recuperar contraseña (sin cambios) */}
+      {/* Link para recuperar contraseña */}
       <div className="text-sm ml-12">
         <Link to="/recuperar-contraseña" className="font-medium text-blue-300 hover:text-blue-500">
           Recuperar contraseña?

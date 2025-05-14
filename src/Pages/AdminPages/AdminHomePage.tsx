@@ -20,7 +20,6 @@ export const AdminHomePage = () => {
           logoState={"logo"}
           dimention={"w-12 h-12"}
           showItem={true}
-          children={undefined}
         />
       </NavBar>
       <HeaderText title="Consorcios" />
