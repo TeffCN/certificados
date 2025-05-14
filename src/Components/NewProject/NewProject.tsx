@@ -17,7 +17,6 @@ const NewProject: React.FC = () => {
   const { projects } = useUserStore();
   console.log("Proyectos disponibles en contexto:", projects);
 
-
   const handleModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const mode = e.target.value;
     setIsUpdate(mode === "update");
