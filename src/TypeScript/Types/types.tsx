@@ -27,6 +27,7 @@ interface InputFormProps {
 interface ProjectType {
   projectTitle: string;
   uid: string;
+  nit: string;
 }
  
 interface CertificateType {

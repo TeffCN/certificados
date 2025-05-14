@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
-import {
-  getPendingUsers,
-  activateUserWithRoleAndConsorcio,
-  rejectUser,
-  getConsorcios,
-} from "../../ServicesFirebase/authService";
-
+import { useEffect, useState } from "react"; 
+import {getPendingUsers,activateUserWithRoleAndConsorcio,rejectUser,getproyectos} from "../../ServicesFirebase/authService";
+import { useProjectsListener } from "../../Hook/useProjectsListener";
 interface User {
   id: string;
   email: string;
@@ -26,7 +21,7 @@ const AdminApprovalModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     const fetchData = async () => {
       const [pendingUsers, consorcioList] = await Promise.all([
         getPendingUsers(),
-        getConsorcios(),
+        getproyectos(), // 
       ]);
       setUsers(pendingUsers);
       setConsorcios(consorcioList);
@@ -53,6 +48,20 @@ const AdminApprovalModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     setUsers((prev) => prev.filter((u) => u.id !== userId));
   };
 
+  const AdminApprovalModal = () => {
+  const { projects } = useProjectsListener();
+
+  return (
+    <select>
+      {projects.map((project) => (
+        <option key={project.uid} value={project.uid}>
+          {project.projectTitle}
+        </option>
+      ))}
+    </select>
+  );
+};
+
   if (!isOpen) return null;
 
   return (
@@ -71,7 +80,7 @@ const AdminApprovalModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 <div>
                   <p><strong>{user.name}</strong></p>
                   <p>{user.email}</p>
-                  <p>{user.consorcio || "Sin consorcio"}</p>
+                  <p>{user.consorcio || "Consorcio"}</p>
                 </div>
                 <div className="flex flex-col gap-2">
                   <select
