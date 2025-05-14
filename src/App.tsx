@@ -14,7 +14,8 @@ import AdminApprovalModal from "./Components/Modal/AdminApprovalModal";
 import { useState } from "react";
 import AddCollaborator from "./Components/Collaborators/addcollaborator";
 import EditCollaborator from "./Components/Collaborators/EditCollaborator"; 
-import { Toaster } from "react-hot-toast"; 
+import { Toaster } from "react-hot-toast";
+import { useGetProjectsFromFirestore } from "./Hook/useGetProjectsFromFirestore"; 
 
 const App: React.FC = () => {
   useGetAuthenticatedUser();
@@ -23,40 +24,51 @@ const App: React.FC = () => {
   const { signOutSesion } = useHandleAuthSigOut();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  //Cargar proyectos globalmente al iniciar la app
+  const { loadingProjects } = useGetProjectsFromFirestore();
+
   const handleLogOut = async () => {
     await signOutSesion();
   };
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/registro" element={<SignUpPage />} />
-        <Route path="/admin/:routeParams" element={<StaffList />} />
-        <Route path="/admin/nuevo/:routeParams" element={<NewProject />} />
-        <Route path="/admin/agregar-colaborador/:proyectoID" element={<AddCollaborator />} />
-        <Route path="/admin/editar-colaborador/:proyectoID" element={<EditCollaborator />} />
+      {loadingProjects && (
+        <div className="text-center mt-5 text-gray-600">
+          Cargando proyectos...
+        </div>
+      )}
 
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute role={["admin"]}>
-              <AdminHomePage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/invitado"
-          element={
-            <PrivateRoute role={["invitado"]}>
-              <GuestHomePage />
-            </PrivateRoute>
-          }
-        />
+      {!loadingProjects && (
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/registro" element={<SignUpPage />} />
+          <Route path="/admin/:routeParams" element={<StaffList />} />
+          <Route path="/admin/nuevo/:routeParams" element={<NewProject />} />
+          <Route path="/admin/agregar-colaborador/:proyectoID" element={<AddCollaborator />} />
+          <Route path="/admin/editar-colaborador/:proyectoID" element={<EditCollaborator />} />
 
-        <Route path="/recuperar-contraseña" element={<RecoverPasswordPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute role={["admin"]}>
+                <AdminHomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/invitado"
+            element={
+              <PrivateRoute role={["invitado"]}>
+                <GuestHomePage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route path="/recuperar-contraseña" element={<RecoverPasswordPage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      )}
 
       {isModalOpen && (
         <AdminApprovalModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

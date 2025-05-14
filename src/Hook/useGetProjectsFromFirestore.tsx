@@ -21,8 +21,11 @@ export const useGetProjectsFromFirestore = () => {
         // Mapear los documentos a un arreglo de objetos `ProjectType`
         const projectsData: ProjectType[] = snapshot.docs.map((doc) => ({
           projectTitle: doc.data().projectTitle || "",
-          uid: doc.data().uid || "",
-        }));
+         uid: doc.data().uid || doc.id,
+        nit: doc.data().nit || "",
+         activo: doc.data().activo !== undefined ? doc.data().activo : true,
+      }));
+
 
         // Actualizar el estado global con los datos obtenidos
         setProjects(projectsData);

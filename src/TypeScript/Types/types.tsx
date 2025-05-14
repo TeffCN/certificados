@@ -28,6 +28,7 @@ interface ProjectType {
   projectTitle: string;
   uid: string;
   nit: string;
+  activo: boolean;
 }
  
 interface CertificateType {

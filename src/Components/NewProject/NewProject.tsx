@@ -5,15 +5,18 @@ import { ProjectType } from "../../TypeScript/Types/types";
 
 const NewProject: React.FC = () => {
   const [isUpdate, setIsUpdate] = useState(false);
-  const [projectData, setProjectData] = useState<ProjectType & { nit: string }>({
+  const [projectData, setProjectData] = useState<ProjectType & { nit: string; activo?: boolean }>({
     uid: "",
     projectTitle: "",
     nit: "",
+    activo: true,
   });
   const [selectedProjectUid, setSelectedProjectUid] = useState<string | null>(null);
 
   const { createProject, updateProject, loading, error } = useManageProjects();
   const { projects } = useUserStore();
+  console.log("Proyectos disponibles en contexto:", projects);
+
 
   const handleModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const mode = e.target.value;
@@ -23,6 +26,7 @@ const NewProject: React.FC = () => {
         projectTitle: "",
         nit: "",
         uid: "",
+        activo: true,
       });
       setSelectedProjectUid(null);
     }
@@ -35,8 +39,9 @@ const NewProject: React.FC = () => {
     if (selectedProject) {
       setProjectData({
         projectTitle: selectedProject.projectTitle,
-        nit: (selectedProject as any).nit || "", 
+        nit: (selectedProject as any).nit || "",
         uid: selectedUid,
+        activo: (selectedProject as any).activo ?? true,
       });
     }
   };
@@ -48,6 +53,7 @@ const NewProject: React.FC = () => {
       await updateProject(selectedProjectUid, {
         projectTitle: projectData.projectTitle,
         nit: projectData.nit,
+        activo: projectData.activo,
       });
       console.log("Proyecto actualizado con éxito");
     } else {
@@ -55,6 +61,7 @@ const NewProject: React.FC = () => {
         projectTitle: projectData.projectTitle,
         nit: projectData.nit,
         uid: "", // El UID se generará al crear
+        activo: projectData.activo,
       });
       console.log("Proyecto creado con éxito");
     }
@@ -63,6 +70,7 @@ const NewProject: React.FC = () => {
       projectTitle: "",
       nit: "",
       uid: "",
+      activo: true,
     });
     setSelectedProjectUid(null);
   };
@@ -89,8 +97,9 @@ const NewProject: React.FC = () => {
           onChange={handleModeChange}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
-          <option value="create">Crear Proyecto</option>
-          <option value="update">Actualizar Proyecto</option>
+          <option value="create">Crear Consorcio</option>
+          <option value="update">Actualizar Consorcio</option>
+          <option value="update">Desactivar Consorcio</option>
         </select>
       </div>
 
@@ -153,6 +162,20 @@ const NewProject: React.FC = () => {
           placeholder="Ej: 123456789 - 1"
           required
         />
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="activo" className="inline-flex items-center space-x-2 text-sm font-medium text-gray-900 dark:text-white">
+          <input
+            type="checkbox"
+            id="activo"
+            name="activo"
+            checked={projectData.activo}
+            onChange={(e) => setProjectData((prev) => ({ ...prev, activo: e.target.checked }))}
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <span>Proyecto activo</span>
+        </label>
       </div>
 
       <button
