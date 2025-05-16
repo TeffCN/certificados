@@ -78,6 +78,7 @@ const DocumentTable = () => {
                   <FaLock className="inline mr-2" />
                   <span className="text-sm">10/12/2024</span>
                 </td>
+               
                 <td className="px-4 py-2 border-b text-blue-600">
                   <FaDownload className="inline mr-2" />
                   <span className="text-sm">10/12/2024</span>
