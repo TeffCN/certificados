@@ -1,20 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../ServicesFirebase/firebase";
 
-const useCollaborators = (projectId: string) => {
+const useCollaborators = () => {
   const [collaborators, setCollaborators] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchCollaborators = async () => {
-      const ref = collection(db, "proyectos", projectId, "Colaboradores");
-      const snapshot = await getDocs(ref);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setCollaborators(data);
+      const proyectosSnapshot = await getDocs(collection(db, "proyectos"));
+      const allCollaborators: any[] = [];
+
+      for (const proyectoDoc of proyectosSnapshot.docs) {
+        const projectId = proyectoDoc.id;
+        const colabRef = collection(db, "proyectos", projectId, "Colaboradores");
+        const colabSnapshot = await getDocs(colabRef);
+
+        colabSnapshot.forEach((doc) => {
+          const data = doc.data();
+          allCollaborators.push({
+            id: doc.id,
+            ...data,
+            projectId,
+          });
+        });
+      }
+
+      setCollaborators(allCollaborators);
     };
 
-    if (projectId) fetchCollaborators();
-  }, [projectId]);
+    fetchCollaborators();
+  }, []);
 
   return collaborators;
 };

@@ -4,8 +4,7 @@ import useCollaborators from "../../Hook/useCollaborators";
 import { uploadPDF, getPDFUrl } from "../../ServicesFirebase/colaboradoresService";
 
 const DocumentTable = () => {
-  const projectId = "Ti58DXDqEYKuCbBk9tXGw";
-  const collaborators = useCollaborators(projectId);
+  const collaborators = useCollaborators();
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [uploadedDocs, setUploadedDocs] = useState<{ [key: string]: boolean }>({});
